@@ -1,0 +1,10 @@
+///////////////////////////NPM Commands ////////////////////////////////
+///////SETTING UP PACKAGES Commands ///////
+npm init -y
+npm install -g nodemon
+npm install apollo-server graphql
+npm i @neo4j/graphql neo4j-driver
+
+///////SETTING UP FRONT-END REACT APP Commands ///////
+npx create-react-app web-react --use-npm
+///////////////////////////NPM Commands ////////////////////////////////

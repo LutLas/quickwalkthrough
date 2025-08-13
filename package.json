@@ -1,0 +1,19 @@
+{
+  "name": "quickwalkthrough",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@neo4j/graphql": "^6.2.3",
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.9.0",
+    "neo4j-driver": "^5.27.0"
+  }
+}
