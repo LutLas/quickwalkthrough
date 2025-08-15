@@ -2,9 +2,10 @@
 ///////SETTING UP PACKAGES Commands ///////
 npm init -y
 npm install -g nodemon
-npm install apollo-server graphql
+npm install apollo-server graphql  /////server_side
 npm i @neo4j/graphql neo4j-driver
 
 ///////SETTING UP FRONT-END REACT APP Commands ///////
 npx create-react-app web-react --use-npm
+npm install @apollo/client graphql  /////client_side
 ///////////////////////////NPM Commands ////////////////////////////////
