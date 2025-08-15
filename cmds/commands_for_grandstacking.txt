@@ -9,3 +9,25 @@ npm i @neo4j/graphql neo4j-driver
 npx create-react-app web-react --use-npm
 npm install @apollo/client graphql  /////client_side
 ///////////////////////////NPM Commands ////////////////////////////////
+
+///////////////////GraphQL Update Mutation With Connect//////////////////
+mutation {
+  updateBusinesses(
+    where: { businessId_EQ: "b10" }
+    update: {
+      categories: {
+        connect: [ {
+          where: { node: { OR: [{ name_EQ: "Restaurant" }, { name_EQ: "Breakfast" }] } }
+        }]
+      }
+    }
+  ) {
+    businesses {
+      name
+      categories {
+        name
+      }
+    }
+  }
+}
+///////////////////GraphQL Update Mutation With Connect//////////////////
