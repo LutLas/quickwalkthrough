@@ -1,6 +1,7 @@
 const { ApolloServer } = require("apollo-server");
 const neo4j = require("neo4j-driver");
 const { Neo4jGraphQL } = require("@neo4j/graphql");
+const { Neo4jGraphQLAuthJWKSPlugin } = require("@neo4j/graphql-plugin-auth");
 
 const typeDefs = /* GraphQL */ `
     type Business @node{
@@ -40,11 +41,20 @@ const driver = neo4j.driver(
     neo4j.auth.basic("neo4j", "password")
 );
 
-const neoSchema = new Neo4jGraphQL({ typeDefs, driver});
+const neoSchema = new Neo4jGraphQL({
+    typeDefs,
+    driver,
+    plugins: {
+        auth: new Neo4jGraphQLAuthJWKSPlugin({
+            jwksEndpoint: "https://dev-wjhxa0twv4r2j4yf.us.auth0.com/.well-known/jwks.json",
+        }),
+    },
+});
 
 neoSchema.getSchema().then((schema) => {
     const server = new ApolloServer({
         schema,
+        context: ({ req }) => ({ req }),
     });
     server.listen().then(({ url }) => {
         console.log(`GraphQL server ready at ${url}`);

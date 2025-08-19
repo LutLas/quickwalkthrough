@@ -12,8 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@neo4j/graphql": "^6.2.3",
+    "@neo4j/graphql-plugin-auth": "^2.2.0",
     "apollo-server": "^3.13.0",
     "graphql": "^16.9.0",
+    "jsonwebtoken": "^9.0.2",
     "neo4j-driver": "^5.27.0"
   }
 }

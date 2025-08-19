@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import BusinessResultsTemp from "../BusinessScreen/Fillers/BusinessResultsTemp";
 import BusinessHeader from "./Fillers/BusinessHeader";
 import { gql, useQuery } from "@apollo/client";
+import { useAuth0 } from "@auth0/auth0-react";
+import Profile from "../Profile";
 
 
-/*Fragments*/
-const BUSINESS_DETAILS_FRAGMENT = gql`
+
+
+function BusinessIndexScreen() {
+    const [inputText, setInputText] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+
+    /*Fragments*/
+    const BUSINESS_DETAILS_FRAGMENT = gql`
     fragment businessDetails on Business {
         businessId
         name
@@ -13,13 +23,16 @@ const BUSINESS_DETAILS_FRAGMENT = gql`
         categories {
             name
         }
+        reviews {
+            stars
+        }
         isStarred @client
     }
 `;
-/*Fragments*/
+    /*Fragments*/
 
-/*Queries*/
-const GET_BUSINESSES_QUERY = gql`
+    /*Queries*/
+    const GET_BUSINESSES_QUERY = gql`
     query BusinessesByCategory($selectedCategory: String!, $searchText: String!) {
         businesses(
             where: { name_CONTAINS: $searchText, categories_SOME: { name_CONTAINS: $selectedCategory }}
@@ -30,32 +43,27 @@ const GET_BUSINESSES_QUERY = gql`
     ${BUSINESS_DETAILS_FRAGMENT}
 `;
 
-/*const GET_BUSINESSES_BY_NAME_QUERY = gql`
-    query BusinessesByCategory($searchText: String!) {
-        businesses(
-            where: { name_CONTAINS: $searchText } 
-        ) {
-            ...businessDetails
+    /*const GET_BUSINESSES_BY_NAME_QUERY = gql`
+        query BusinessesByCategory($searchText: String!) {
+            businesses(
+                where: { name_CONTAINS: $searchText }
+            ) {
+                ...businessDetails
+            }
         }
-    }
-    ${BUSINESS_DETAILS_FRAGMENT}
-`;*/
+        ${BUSINESS_DETAILS_FRAGMENT}
+    `;*/
 
 
 
-const GET_CATEGORIES_QUERY = gql`
+    const GET_CATEGORIES_QUERY = gql`
     query GetCategories {
         categories {
             name
         }
     }
 `;
-/*Queries*/
-
-function BusinessIndexScreen() {
-    const [inputText, setInputText] = useState('');
-    const [searchText, setSearchText] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState("");
+    /*Queries*/
 
     const {
         loading: businessesLoading,
@@ -83,6 +91,11 @@ function BusinessIndexScreen() {
     return (
         <div>
             <BusinessHeader/>
+            {!isAuthenticated && (
+                <button onClick={() => loginWithRedirect()}>Log In</button>
+            )}
+            {isAuthenticated && <button onClick={() => logout()}>Log Out</button>}
+            <Profile />
             <h1>Business Search</h1>
 
             <label>

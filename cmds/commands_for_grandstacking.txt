@@ -11,6 +11,8 @@ npm install @apollo/client graphql  /////client_side
 
 ///////SETTING UP AUTHENTICATION///////
 npm install jsonwebtoken
+npm i @neo4j/graphql-plugin-auth
+npm install @auth0/auth0-react
 ///////////////////////////NPM Commands////////////////////////////////
 
 ///////////////////GraphQL Update Mutation With Connect//////////////////

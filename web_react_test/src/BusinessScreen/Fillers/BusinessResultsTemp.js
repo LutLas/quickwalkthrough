@@ -1,10 +1,12 @@
 // BusinessResultsTemp.js
 import React from 'react';
 import {starredVar} from "../../index";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function BusinessResultsTemp(props) {
     const {businesses} = props;
     const starredItems = starredVar();
+    const { isAuthenticated } = useAuth0();
 
     return (
         <div>
@@ -17,6 +19,7 @@ function BusinessResultsTemp(props) {
                     <th>Name</th>
                     <th>Address</th>
                     <th>Category</th>
+                    {isAuthenticated ? <th>Average Stars</th> : null}
                 </tr>
                 </thead>
                 <tbody>
@@ -50,6 +53,7 @@ function BusinessResultsTemp(props) {
                         <td> {/* No whitespace */}
                             {b.categories.map(c => c.name).join(", ")}
                         </td>
+                        {isAuthenticated ? <td>{b.reviews.map(c => c.stars).reduce((acc, val)=> acc + val, 0)/b.reviews.map(c => c.stars).length}</td> : null}
                     </tr>
                 ))}
                 </tbody>
