@@ -36,7 +36,7 @@ const typeDefs = /* GraphQL */ `
 `;
 
 const driver = neo4j.driver(
-    "bolt://localhost:7687",
+    "neo4j://127.0.0.1:7687",
     neo4j.auth.basic("neo4j", "password")
 );
 
