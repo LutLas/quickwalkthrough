@@ -1,118 +1,47 @@
 import React, { useState } from "react";
 import BusinessResultsTemp from "../BusinessScreen/Fillers/BusinessResultsTemp";
-import BusinessHeader from "./Fillers/BusinessHeader";
-import { gql, useQuery } from "@apollo/client";
-import { useAuth0 } from "@auth0/auth0-react";
-import Profile from "../Profile";
 
 
+function BusinessIndexScreen(props) {
 
 
-function BusinessIndexScreen() {
-    const [inputText, setInputText] = useState('');
     const [searchText, setSearchText] = useState('');
     const [selectedCategory, setSelectedCategory] = useState("");
-    const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
-    /*Fragments*/
-    const BUSINESS_DETAILS_FRAGMENT = gql`
-    fragment businessDetails on Business {
-        businessId
-        name
-        address
-        categories {
-            name
-        }
-        reviews {
-            stars
-        }
-        isStarred @client
-    }
-`;
-    /*Fragments*/
+    const handleSearchTextChange = e => {
+        setSearchText(e.target.value)
+    };
 
-    /*Queries*/
-    const GET_BUSINESSES_QUERY = gql`
-    query BusinessesByCategory($selectedCategory: String!, $searchText: String!) {
-        businesses(
-            where: { name_CONTAINS: $searchText, categories_SOME: { name_CONTAINS: $selectedCategory }}
-        ) {
-            ...businessDetails
-        }
-    }
-    ${BUSINESS_DETAILS_FRAGMENT}
-`;
+    const handleSelectedCategoryChange = e => {
+        setSelectedCategory(e.target.value)
+    };
 
-    /*const GET_BUSINESSES_BY_NAME_QUERY = gql`
-        query BusinessesByCategory($searchText: String!) {
-            businesses(
-                where: { name_CONTAINS: $searchText }
-            ) {
-                ...businessDetails
-            }
-        }
-        ${BUSINESS_DETAILS_FRAGMENT}
-    `;*/
+    const filteredByBusinessesName = props.businesses.filter(
+        business => business.name.toLowerCase().includes(searchText.toLowerCase())
+    )
 
+    const filteredByBusinessesCategory = filteredByBusinessesName.filter(
+            business => business.categories.some(c=>c.name.toLowerCase().includes(selectedCategory.toLowerCase()))
+    )
 
-
-    const GET_CATEGORIES_QUERY = gql`
-    query GetCategories {
-        categories {
-            name
-        }
-    }
-`;
-    /*Queries*/
-
-    const {
-        loading: businessesLoading,
-        error: businessesError,
-        data: businessesData
-    } = useQuery(
-        GET_BUSINESSES_QUERY,{
-            variables: { selectedCategory, searchText },
-        });
-
-    const {
-        loading: categoriesLoading,
-        error: categoriesError,
-        data: categoriesData
-    } = useQuery(GET_CATEGORIES_QUERY);
-
-    /*const {
-        loading: businessByNameLoading,
-        error: businessByNameError,
-        data: businessByNameData
-    } = useQuery(GET_BUSINESSES_BY_NAME_QUERY);*/
-
-    if (businessesError || categoriesError /*|| businessByNameError*/) return <p>Error</p>;
-    if (businessesLoading || categoriesLoading /*|| businessByNameLoading*/) return <p>Loading...</p>;
     return (
         <div>
-            <BusinessHeader/>
-            {!isAuthenticated && (
-                <button onClick={() => loginWithRedirect()}>Log In</button>
-            )}
-            {isAuthenticated && <button onClick={() => logout()}>Log Out</button>}
-            <Profile />
             <h1>Business Search</h1>
 
             <label>
                 Search Business Name:
                 <input
-                    value={inputText}
-                    onChange={event => setInputText(event.target.value)}/>
-                <input type="button" value="SEARCH" onClick={() => setSearchText(inputText)}/>
+                    value={searchText}
+                    onChange={handleSearchTextChange}/>
             </label>
             <form>
                 <label>
                     Select Business Category:
                     <select value={selectedCategory}
-                            onChange={(event) => setSelectedCategory(event.target.value)}
+                            onChange={handleSelectedCategoryChange}
                     >
                         <option value="">All</option>
-                        {categoriesData.categories.map((category) => (
+                        {props.categories.map((category) => (
                             <option key={category.name} value={category.name}>
                                 {category.name}
                             </option>
@@ -122,10 +51,9 @@ function BusinessIndexScreen() {
                 <input type="button" value="CLEAR" onClick={() => {
                     setSelectedCategory("")
                     setSearchText("")
-                    setInputText("")
                 }}/>
             </form>
-            <BusinessResultsTemp businesses={businessesData.businesses}/>
+            <BusinessResultsTemp businesses={filteredByBusinessesCategory}/>
         </div>
     );
 }

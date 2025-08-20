@@ -21,3 +21,11 @@ const BusinessHeader = () => {
 };
 
 export default BusinessHeader;
+
+
+const users = [
+    { id: 1, name: 'Alice', details: [{depid: 1, status: 'active', department: 'sales' },{depid: 2, status: 'inactive', department: 'IT' }] },
+    { id: 2, name: 'Bob', details: { status: 'inactive', department: 'marketing' } },
+    { id: 3, name: 'Charlie', details: { status: 'active', department: 'engineering' } },
+    { id: 4, name: 'David', details: { status: 'inactive', department: 'sales' } },
+];

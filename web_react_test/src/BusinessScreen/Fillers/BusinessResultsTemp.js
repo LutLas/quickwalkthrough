@@ -10,7 +10,7 @@ function BusinessResultsTemp(props) {
 
     return (
         <div>
-            <h2>Category Results</h2>
+            <h2>Business Results</h2>
             <table>
                 <thead>
                 <tr>
